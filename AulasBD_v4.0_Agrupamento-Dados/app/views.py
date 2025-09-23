@@ -66,16 +66,19 @@ def ranking_municipios(request):
         cursor = conexao.cursor()
 
         sql = '''SELECT TOP(15)
-	            m.nome, count(*) as QTD_CAMPI
-                FROM Municipio m
-                inner join Campus c on c.id_municipio = m.id_municipio
-                group by m.nome 
-                order by QTD_CAMPI desc'''
+                    (m.nome + ' (' + m.uf + ')'), count(*) as QTD_CAMPI
+                    FROM Municipio m
+                    inner join Campus c on c.id_municipio = m.id_municipio
+                    group by (m.nome + ' (' + m.uf + ')')
+                    order by QTD_CAMPI desc'''
 
-        ranking = cursor.execute(sql).fetchval()
+        resultado = cursor.execute(sql).fetchall()
+        context = {
+            "ranking": resultado,
+        }
 
         # define a pagina a ser carregada, adicionando os registros das tabelas 
-        return render(request, template, context={ranking})
+        return render(request, template, context=context)
     
     # se ocorreu algunm erro, insere a mensagem para ser exibida no contexto da página 
     except Exception as err:

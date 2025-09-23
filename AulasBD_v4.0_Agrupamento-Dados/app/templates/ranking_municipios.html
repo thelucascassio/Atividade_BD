@@ -20,9 +20,9 @@
             <tbody>
                 {% for r in ranking %}
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td style="text-align: right;">{{forloop.counter}}°</td>
+                    <td>{{r.0}}</td>
+                    <td>{{r.1 | intcomma}}</td>
                 </tr>
                 {% endfor %}
             </tbody>

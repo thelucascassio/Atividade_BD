@@ -94,36 +94,39 @@ def ranking_ofertas(request):
         # define um cursor para executar comandos SQL
         cursor = conexao.cursor()
 
+        sql = '''
+                select distinct
+                    m.uf
+                    from Municipio m'''
+
         # obtem a quantidade de registros de Instituicoes Financeiras
-        sql = 'SELECT count(*) FROM IES '
         # obtem o valor retornado usando "fetchval"
-        count_ies = cursor.execute(sql).fetchval()
+        ufs = cursor.execute(sql).fetchall()
 
-        # obtem a quantidade de registros de Cursos
-        sql = 'SELECT count(*) FROM campus '
-        count_campus = cursor.execute(sql).fetchval()
+        dados_ranking = []
+        for reg in ufs:
+            sigla = reg[0]
+            sql = f'''
+                select top(10)
+                    c.nome, count(*), round(avg(co.enade), 2), min(co.enade) as minimum, max(co.enade) as maximum
+                from Cursos_Oferecidos_por_Campus co
+                inner join Curso c on c.id_curso = co.id_curso
+                inner join Campus on Campus.id_campus = co.id_campus
+                inner join Municipio m on m.id_municipio = Campus.id_municipio
+                where m.uf = '{sigla}'
+                group by c.nome
+                having round(avg(co.enade), 2) >= 2.5
+                order by count(*) desc
+            '''
+            resultado = cursor.execute(sql).fetchall()
+            dados_ranking.append({"uf": sigla, "resultado": resultado})
 
-        # obtem a quantidade de registros de Cursos
-        sql = 'SELECT count(*) FROM curso '
-        count_cursos = cursor.execute(sql).fetchval()
-
-        # obtem a quantidade de registros de Cursos
-        sql = 'SELECT count(*) FROM cursos_oferecidos_por_campus '
-        count_ofertas = cursor.execute(sql).fetchval()
-
-        # obtem a quantidade de registros de Cursos
-        sql = 'SELECT count(*) FROM area '
-        count_areas = cursor.execute(sql).fetchval()
-
+        context = {
+            "ranking": dados_ranking
+        }
         # define a pagina a ser carregada, adicionando os registros das tabelas 
         return render(request, template, 
-                    context={
-                          'count_ies': count_ies,
-                          'count_campus': count_campus,
-                          'count_cursos': count_cursos,
-                          'count_ofertas': count_ofertas,
-                          'count_areas': count_areas,
-                    })
+                    context=context)
     
     # se ocorreu algunm erro, insere a mensagem para ser exibida no contexto da página 
     except Exception as err:

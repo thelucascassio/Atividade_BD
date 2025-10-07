@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block titulo_pagina %}
+    <h2>Cursos ofertados por área de conhecimento</h2>
+{% endblock %}
+
+{% block conteudo %}
+
+
+<div class="dashboard">
+    {% for item in cursos_por_area %}
+        <div class="card">
+            <h3> {{ item.area_conhecimento }}</h3>
+            <p>{{ item.quantidade_cursos|intcomma }} </p>
+        </div>
+    {% empty %}
+        <p>Nenhum dado de campi por UF disponível.</p>
+    {% endfor %}
+</div>
+
+{% endblock %}

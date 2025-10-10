@@ -1,0 +1,33 @@
+{% extends "base.html" %} 
+{% load humanize %}
+
+{% block titulo_pagina %}
+    <h2>Exercício 2</h2>
+{% endblock %} 
+
+{% block conteudo %}
+
+    <div class="dashboard" style="display: inline;">
+        <p>Retornar os nomes dos cursos que possuem >= 2000 ofertas, ordenados inversamente por quantidade de ofertas.<br>
+
+        </p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Curso</th>
+                    <th>Ofertas</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in result %}
+                <tr>
+                    <td>{{r.0}}</td>
+                    <td>{{r.1}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+{% endblock %}

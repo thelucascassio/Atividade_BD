@@ -34,6 +34,30 @@ def exercicio1(request):
     except Exception as err:
         return render(request, template, context={'ERRO': err})
 
+def exercicio2(request):
+    # define a página HTML (template) que deverá será carregada
+    template = 'exercicio2.html'
+    try:
+        # obtem a conexao com o BD
+        conexao = obter_conexao()
+
+        # define um cursor para executar comandos SQL
+        cursor = conexao.cursor()
+
+        sql = '''select * from view_curso
+                order by ofertas desc;'''
+
+        resultado = cursor.execute(sql).fetchall()
+        context = {
+            "result": resultado,
+        }
+
+        # define a pagina a ser carregada, adicionando os registros das tabelas 
+        return render(request, template, context=context)
+    
+    # se ocorreu algunm erro, insere a mensagem para ser exibida no contexto da página 
+    except Exception as err:
+        return render(request, template, context={'ERRO': err})
 
 def exercicio3(request):
     # define a página HTML (template) que deverá será carregada

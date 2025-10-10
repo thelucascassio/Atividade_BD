@@ -1,0 +1,31 @@
+{% extends "base.html" %} 
+{% load humanize %}
+
+{% block titulo_pagina %}
+    <h2>Exercício 3</h2>
+{% endblock %} 
+
+{% block conteudo %}
+
+<div class="dashboard" style="display: inline;">
+    <p>Retornar a média do ENADE agrupada por área e curso, somente para aquelas áreas e cursos com a média
+        do ENADE >=3.<br>Ordenar por área e curso.
+    </p>
+    <table>
+        <thead>
+            <tr>
+                <th>Área</th>
+                <th>Curso</th>
+                <th>Média ENADE</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in result %}
+            <tr>                
+                <td>{{ r.0 }}</td>  <td>{{ r.1 }}</td>  <td>{{ r.2 | floatformat:1 }}</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

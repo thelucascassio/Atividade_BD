@@ -4,6 +4,3 @@ CREATE VIEW view_uf AS
 SELECT distinct
 	m.uf as unidade_federativa
 FROM Municipio m;
-go
-SELECT * FROM view_uf
-order by unidade_federativa
